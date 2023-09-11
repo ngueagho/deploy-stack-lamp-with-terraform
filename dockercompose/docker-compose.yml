@@ -1,0 +1,80 @@
+version: '3'
+
+# services:
+#   apache2:
+#     image: httpd
+#     restart: always
+#     ports:
+#       - 8000:80
+
+#   php:
+#     image: php
+#     # restart: always
+#     ports:
+#     - 8001:80
+#     depends_on:
+#       - mysql
+
+#   # mysql:
+#   #   image: mysql
+#   #   # restart: always
+#   #   ports:
+#   #   - 3306:3306
+
+#   mysql:
+#     image: mysql:latest
+#     ports:
+#       - 3306:3306
+#     environment:
+#       MYSQL_ROOT_PASSWORD: secret
+#       MYSQL_DATABASE: mydatabase
+#       MYSQL_USER: myuser
+#       MYSQL_PASSWORD: mypassword
+
+
+
+
+services:
+    web:
+        image: lavoweb/php-5.6
+        ports:
+            - "80:80"
+        volumes:
+            - ~/.docker/www:/var/www/html
+        links:
+            - db:db
+        networks:
+            - lampp_network
+
+
+
+    db:
+        image: mysql:5.5
+        volumes:
+            - ~/.docker/mysql:/var/lib/mysql
+        ports:
+            - "3306:3306"
+
+        environment:
+            - MYSQL_ROOT_PASSWORD="root"
+            - MYSQL_PASSWORD="root"
+            # - DB_HOST="localhost"
+        networks:
+            - lampp_network
+    
+
+
+    myadmin:
+        image: phpmyadmin/phpmyadmin
+        ports:
+            - "8080:80"
+        links:
+            - db:db
+        networks:
+            - lampp_network
+
+networks:
+    lampp_network:
+    
+
+ 
